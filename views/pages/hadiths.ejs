@@ -1,0 +1,301 @@
+<section>
+  <h2>Hadith Quiz</h2>
+
+  <% if (!hadiths.length) { %>
+    <p>No hadiths yet.</p>
+  <% } else { %>
+    
+    <div id="levelPanel" class="panel">
+      <label for="level">Select Level:</label>
+      <select id="level">
+        <option value="1">Level 1 (10 Qs)</option>
+        <option value="2">Level 2 (20 Qs)</option>
+        <option value="3">Level 3 (30 Qs)</option>
+        <option value="4">Level 4 (40 Qs)</option>
+        <option value="5">Level 5 (50 Qs)</option>
+      </select>
+      <button type="button" onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <button id="closeLevelBtn" type="button" onclick="hideQuiz()" style="display:none;">Close Level</button>
+
+    <div id="quizContainer" style="display:none;">
+      <p id="progress"></p>
+      <form id="quizForm"></form>
+      <button id="nextBtn" type="button" onclick="nextQuestion()" disabled>Next</button>
+      <div id="result"></div>
+    </div>
+
+    <style>
+      section {
+        max-width: 700px;
+        margin: auto;
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      h2 {
+        text-align: center;
+        color: #2c3e50;
+      }
+      .panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      #quizForm {
+        padding: 0;
+        margin: 0;
+      }
+      .question {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        margin-bottom: 10px;
+        transition: opacity 0.3s ease;
+      }
+      .question p {
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+      label {
+        cursor: pointer;
+        display: block;
+        margin-bottom: 5px;
+      }
+      input[type="radio"] {
+        margin-right: 8px;
+      }
+      #nextBtn, #closeLevelBtn, .panel button {
+        padding: 8px 16px;
+        border: none;
+        background-color: #3498db;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+      }
+      #nextBtn:disabled {
+        background-color: #7f8c8d;
+        cursor: not-allowed;
+      }
+      #nextBtn:hover:not(:disabled),
+      #closeLevelBtn:hover,
+      .panel button:hover {
+        background-color: #2980b9;
+      }
+      #result {
+        margin-top: 20px;
+        padding: 15px;
+        background: #ecf0f1;
+        border-radius: 8px;
+      }
+      #result ol {
+        padding-left: 20px;
+      }
+      .correct {
+        color: green;
+        font-weight: bold;
+      }
+      .wrong {
+        color: red;
+        font-weight: bold;
+      }
+      @media(max-width:600px){
+        section {
+          padding: 10px;
+        }
+        .panel {
+          flex-direction: column;
+        }
+        #nextBtn, #closeLevelBtn, .panel button {
+          width: 100%;
+        }
+      }
+
+.panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.level-label {
+  font-size: 1.3rem; /* increase label size */
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#level {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+#level:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.panel button {
+  padding: 8px 18px;
+  border: none;
+  background-color: #3498db;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.panel button:hover {
+  background-color: #2980b9;
+}
+
+@media (max-width: 600px) {
+  .panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  #level {
+    width: 100%;
+  }
+
+  .panel button {
+    width: 100%;
+  }
+}
+
+
+    </style>
+
+    <script>
+      const allQuestions = <%- JSON.stringify(hadiths) %>;
+      let currentQuestions = [];
+      let currentIndex = 0;
+      let userAnswers = [];
+
+      function startQuiz() {
+        const level = parseInt(document.getElementById('level').value);
+        const totalQs = Math.min(level * 10, allQuestions.length);
+
+        const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+        currentQuestions = shuffled.slice(0, totalQs);
+        currentIndex = 0;
+        userAnswers = [];
+
+        document.getElementById('levelPanel').style.display = 'none';
+        document.getElementById('closeLevelBtn').style.display = 'inline-block';
+        document.getElementById('quizContainer').style.display = 'block';
+        document.getElementById('result').innerHTML = '';
+
+        showQuestion();
+      }
+
+      function showQuestion() {
+        const form = document.getElementById('quizForm');
+        form.style.opacity = 0;
+        setTimeout(() => {
+          form.innerHTML = '';
+          const q = currentQuestions[currentIndex];
+
+          const qDiv = document.createElement('div');
+          qDiv.classList.add('question');
+
+          const qText = document.createElement('p');
+          qText.textContent = `${currentIndex + 1}. ${q.question}`;
+          qDiv.appendChild(qText);
+
+          if(q.options && q.options.length) {
+            q.options.forEach(opt => {
+              const label = document.createElement('label');
+              const input = document.createElement('input');
+              input.type = 'radio';
+              input.name = 'answer';
+              input.value = opt;
+              input.addEventListener('change', () => document.getElementById('nextBtn').disabled = false);
+              label.appendChild(input);
+              label.appendChild(document.createTextNode(` ${opt}`));
+              qDiv.appendChild(label);
+            });
+          }
+
+          form.appendChild(qDiv);
+          form.style.opacity = 1;
+
+          // Update progress
+          document.getElementById('progress').textContent = `Question ${currentIndex + 1} / ${currentQuestions.length}`;
+
+          const nextBtn = document.getElementById('nextBtn');
+          nextBtn.textContent = currentIndex === currentQuestions.length - 1 ? 'Finish' : 'Next';
+          nextBtn.disabled = true; // disable until an option is selected
+        }, 150);
+      }
+
+      function nextQuestion() {
+        const selected = document.querySelector('input[name="answer"]:checked');
+        if(!selected) return;
+
+        userAnswers[currentIndex] = selected.value;
+        currentIndex++;
+
+        if(currentIndex < currentQuestions.length) {
+          showQuestion();
+        } else {
+          showResults();
+        }
+      }
+
+      function showResults() {
+        document.getElementById('quizForm').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('progress').style.display = 'none';
+
+        let score = 0;
+        let resultHTML = `<h3>Correct Answers:</h3><ol>`;
+
+        currentQuestions.forEach((q, idx) => {
+          const userAns = userAnswers[idx];
+          const isCorrect = userAns === q.answer;
+          if(isCorrect) score++;
+
+          resultHTML += `<li>${q.question} — `;
+          q.options.forEach(opt => {
+            if(opt === q.answer) {
+              resultHTML += `<span class="correct">${opt}</span> `;
+            } else if(opt === userAns && !isCorrect) {
+              resultHTML += `<span class="wrong">${opt}</span> `;
+            } else {
+              resultHTML += `${opt} `;
+            }
+          });
+          resultHTML += '</li>';
+        });
+        resultHTML += `</ol><p>Your Score: ${score} / ${currentQuestions.length}</p>`;
+
+        document.getElementById('result').innerHTML = resultHTML;
+      }
+
+      function hideQuiz() {
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('closeLevelBtn').style.display = 'none';
+        document.getElementById('levelPanel').style.display = 'flex';
+        document.getElementById('result').innerHTML = '';
+        document.getElementById('progress').style.display = 'block';
+      }
+    </script>
+  <% } %>
+</section>
+

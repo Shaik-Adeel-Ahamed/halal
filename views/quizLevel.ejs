@@ -1,0 +1,32 @@
+<section class="center">
+  <h2>Select Quiz Level</h2>
+  <p>Each level increases the number of questions.</p>
+
+  <form id="levelForm">
+    <select id="levelSelect" required>
+      <option value="">-- Select Level --</option>
+      <option value="1">Level 1 (10 Questions)</option>
+      <option value="2">Level 2 (20 Questions)</option>
+      <option value="3">Level 3 (30 Questions)</option>
+      <option value="4">Level 4 (40 Questions)</option>
+      <option value="5">Level 5 (50 Questions)</option>
+    </select>
+    <button type="submit" class="btn">Start Quiz</button>
+  </form>
+</section>
+
+<script>
+  document.getElementById('levelForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const level = document.getElementById('levelSelect').value;
+    if (level) window.location.href = `/quiz/${level}`;
+  });
+</script>
+
+<style>
+  .center { max-width: 500px; margin: auto; text-align: center; padding: 40px; }
+  select { padding: 8px 12px; font-size: 16px; border-radius: 5px; }
+  .btn { background: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+  .btn:hover { background: #0056b3; }
+</style>
+8

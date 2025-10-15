@@ -1,0 +1,261 @@
+<!-- <section class="search-results container">
+  <h2>Search Results for "<%= query %>"</h2>
+
+  <% const noResults = (
+    !results.duas.length &&
+    !results.suras.length &&
+    !results.hadiths.length &&
+    !results.sunnahs.length &&
+    !results.emotionals.length
+  ); %>
+
+  <% if (noResults) { %>
+    <p>No results found.</p>
+  <% } %>
+
+  <% if (results.duas.length) { %>
+    <h3>Duas</h3>
+    <ul>
+      <% results.duas.forEach(d => { %>
+        <li><strong><%= d.title %></strong> — <%= d.translation %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (results.suras.length) { %>
+    <h3>Surahs</h3>
+    <ul>
+      <% results.suras.forEach(s => { %>
+        <li><strong>Surah <%= s.number %>: <%= s.name %></strong> — <%= s.shortDescription %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (results.hadiths.length) { %>
+    <h3>Hadiths</h3>
+    <ul>
+      <% results.hadiths.forEach(h => { %>
+        <li><%= h.text %> — <em><%= h.source %></em></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (results.sunnahs.length) { %>
+    <h3>Sunnahs</h3>
+    <ul>
+      <% results.sunnahs.forEach(s => { %>
+        <li><%= s.title %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (results.emotionals.length) { %>
+    <h3>Emotional Guidance</h3>
+    <ul>
+      <% results.emotionals.forEach(e => { %>
+        <li><strong><%= e.mood %></strong>: <%= e.suggestions.join(', ') %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+</section>
+
+<style>
+.search-results {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.search-results h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1a202c;
+}
+.search-results h3 {
+  margin-top: 1.5rem;
+  color: #2d3748;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.25rem;
+}
+.search-results ul {
+  list-style: none;
+  padding: 0;
+}
+.search-results li {
+  background: #f9fafb;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+</style> -->
+
+<!-- <section class="search-results container">
+  <h2>Search Results for "<%= query %>"</h2> -->
+
+ <section class="search-results container">
+  <h2>Search Results for "<%= query %>"</h2>
+
+  <% if (
+    !results.duas.length &&
+    !results.suras.length &&
+    !results.hadiths.length &&
+    !results.sunnahs.length &&
+    !results.emotionals.length
+  ) { %>
+    <p>No results found.</p>
+  <% } %>
+
+  <% if (results.duas.length) { %>
+    <h3>Duas</h3>
+    <ul>
+      <% results.duas.forEach(d => { %>
+        <li class="result-item">
+          <div class="result-title"><%= d.title %></div>
+          <div class="result-details">
+            <% if (d.arabic) { %><p><strong>Arabic:</strong> <%= d.arabic %></p><% } %>
+            <% if (d.transliteration) { %><p><strong>Transliteration:</strong> <%= d.transliteration %></p><% } %>
+            <% if (d.translation) { %><p><strong>Translation:</strong> <%= d.translation %></p><% } %>
+            <% if (d.tags && d.tags.length) { %><p><strong>Tags:</strong> <%= d.tags.join(', ') %></p><% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (results.suras.length) { %>
+    <h3>Surahs</h3>
+    <ul>
+      <% results.suras.forEach(s => { %>
+        <li class="result-item">
+          <div class="result-title">Surah <%= s.number %>: <%= s.name %></div>
+          <div class="result-details">
+            <p><strong>Description:</strong> <%= s.shortDescription %></p>
+            <% if (s.uses && s.uses.length) { %>
+              <p><strong>Uses:</strong></p>
+              <ul>
+                <% s.uses.forEach(u => { %>
+                  <li><strong><%= u.when %></strong>: <%= u.benefit %> (<%= u.times %>)</li>
+                <% }) %>
+              </ul>
+            <% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (results.hadiths.length) { %>
+    <h3>Hadiths</h3>
+    <ul>
+      <% results.hadiths.forEach(h => { %>
+        <li class="result-item">
+          <div class="result-title"><%= h.source || 'Hadith' %></div>
+          <div class="result-details">
+            <p><%= h.text %></p>
+            <% if (h.reference) { %><p><strong>Reference:</strong> <%= h.reference %></p><% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (results.sunnahs.length) { %>
+    <h3>Sunnahs</h3>
+    <ul>
+      <% results.sunnahs.forEach(s => { %>
+        <li class="result-item">
+          <div class="result-title"><%= s.title %></div>
+          <% if (s.description && s.description.length) { %>
+            <div class="result-details">
+              <ul>
+                <% s.description.forEach(d => { %>
+                  <li><%= d %></li>
+                <% }) %>
+              </ul>
+            </div>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (results.emotionals.length) { %>
+    <h3>Emotional Guidance</h3>
+    <ul>
+      <% results.emotionals.forEach(e => { %>
+        <li class="result-item">
+          <div class="result-title"><%= e.mood.charAt(0).toUpperCase() + e.mood.slice(1) %></div>
+          <div class="result-details">
+            <ul>
+              <% e.suggestions.forEach(s => { %>
+                <li><%= s %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</section>
+
+<style>
+.search-results {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.search-results h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1a202c;
+}
+.search-results h3 {
+  margin-top: 1.5rem;
+  color: #2d3748;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.25rem;
+}
+.search-results ul {
+  list-style: none;
+  padding: 0;
+}
+.result-item {
+  background: #f9fafb;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.result-title {
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  color: #2d3748;
+  background: #e2e8f0;
+}
+.result-details {
+  display: none;
+  padding: 0.75rem 1rem;
+  color: #4a5568;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+.result-item.active .result-details {
+  display: block;
+}
+.no-results {
+  text-align: center;
+  font-style: italic;
+  color: #718096;
+}
+</style>
+
+<script>
+document.querySelectorAll('.result-item').forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.toggle('active');
+  });
+});
+</script>
+

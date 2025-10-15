@@ -1,0 +1,118 @@
+<section class="sunnah-section">
+  <h2 class="section-title">Sunnas</h2>
+
+  <% if (!sunnas.length) { %>
+    <p class="no-entries">No entries yet.</p>
+  <% } else { %>
+    <div class="sunnah-cards">
+      <% sunnas.forEach((s, index) => { %>
+        <div class="sunnah-card">
+          <% if (s.description && s.description.length) { %>
+            <h3 class="sunnah-title" onclick="toggleDescription('desc-<%= index %>')">
+              <%= s.title %>
+              <span class="toggle-icon" id="icon-<%= index %>">▼</span>
+            </h3>
+            <ul class="sunnah-descriptions" id="desc-<%= index %>" style="display: none;">
+              <% s.description.forEach(d => { %>
+                <li><%= d %></li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <h3 class="sunnah-title"><%= s.title %></h3>
+          <% } %>
+
+          <% if (s.references) { %>
+            <small class="sunnah-references">References: <%= s.references %></small>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<style>
+.sunnah-section {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #1a202c;
+}
+
+.no-entries {
+  text-align: center;
+  font-style: italic;
+  color: #718096;
+}
+
+.sunnah-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.sunnah-card {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sunnah-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.sunnah-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: #2d3748;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-icon {
+  font-size: 0.9rem;
+  transition: transform 0.2s;
+}
+
+.sunnah-descriptions {
+  list-style: disc inside;
+  margin-bottom: 0.75rem;
+  color: #4a5568;
+  padding-left: 0;
+}
+
+.sunnah-descriptions li {
+  margin-bottom: 0.3rem;
+}
+
+.sunnah-references {
+  display: block;
+  font-size: 0.875rem;
+  color: #718096;
+}
+</style>
+
+<script>
+function toggleDescription(id) {
+  const desc = document.getElementById(id);
+  const icon = document.getElementById('icon-' + id.split('-')[1]);
+  if (desc.style.display === 'none') {
+    desc.style.display = 'block';
+    icon.style.transform = 'rotate(180deg)';
+  } else {
+    desc.style.display = 'none';
+    icon.style.transform = 'rotate(0deg)';
+  }
+}
+</script>
+

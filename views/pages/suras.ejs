@@ -1,0 +1,84 @@
+<section>
+    <h2>Suras & Uses</h2>
+
+    <% if (!suras.length) { %>
+        <p>No sura info yet.</p>
+        <% } else { %>
+            <div class="sura-list">
+                <% suras.forEach((sura, index)=> { %>
+                    <article class="card">
+                        <div class="card-header" onclick="toggleDetails('sura-<%= index %>')">
+                            <h3>
+                                <%= sura.number %>. <%= sura.name %>
+                            </h3>
+                        </div>
+                        <div class="card-details" id="sura-<%= index %>" style="display: none;">
+                            <% if (sura.shortDescription) { %>
+                                <p>
+                                    <%= sura.shortDescription %>
+                                </p>
+                                <% } %>
+
+                                    <% if (sura.uses && sura.uses.length> 0) { %>
+                                        <p><strong>Uses:</strong></p>
+                                        <ul>
+                                            <% sura.uses.forEach(use=> { %>
+                                                <li>
+                                                    <% if (use.when) { %><strong>When:</strong>
+                                                        <%= use.when %><br>
+                                                            <% } %>
+                                                                <% if (use.benefit) { %><strong>Benefit:</strong>
+                                                                    <%= use.benefit %><br>
+                                                                        <% } %>
+                                                                            <% if (use.times) { %>
+                                                                                <strong>Times:</strong>
+                                                                                <%= use.times %>
+                                                                                    <% } %>
+                                                </li>
+                                                <% }) %>
+                                        </ul>
+                                        <% } %>
+                        </div>
+                    </article>
+                    <% }) %>
+            </div>
+            <% } %>
+
+</section>
+<script> 
+    function toggleDetails(id) { 
+        const el = document.getElementById(id); 
+        if (el) {
+            el.style.display = el.style.display === 'none' ? 'block' : 'none'; 
+        } 
+    } 
+</script>
+<style>
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background-color: #f9f9f9;
+    }
+
+    .card-header {
+        cursor: pointer;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .card-details {
+        margin-top: 1rem;
+        padding-left: 1rem;
+    }
+
+    .card-details ul {
+        list-style: disc;
+        margin-left: 1.5rem;
+    }
+
+    .card-details li {
+        margin-bottom: 0.75rem;
+    }
+</style>

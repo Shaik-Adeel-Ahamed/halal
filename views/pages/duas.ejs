@@ -1,0 +1,49 @@
+<!-- <section>
+<h2>Duas</h2>
+<% if (duas.length === 0) { %>
+<p>No duas yet. Run <code>npm run seed</code> to add examples.</p>
+<% } %>
+<div class="cards">
+<% duas.forEach(d => { %>
+<article class="card">
+<h3><%= d.title %></h3>
+<p class="arabic"><%= d.arabic %></p>
+<p class="transliteration"><%= d.transliteration %></p>
+<p class="translation"><%= d.translation %></p>
+<p class="tags">Tags: <%= d.tags.join(', ') %></p>
+</article>
+<% }) %>
+</div>
+</section> -->
+
+<section>
+  <h2>Duas</h2>
+
+  <% if (duas.length === 0) { %>
+    <p>No duas yet. Run <code>npm run seed</code> to add examples.</p>
+  <% } %>
+
+  <div class="cards">
+    <% duas.forEach(function(d) { %>
+      <article class="card">
+        <h3 class="dua-title"><%= d.title %></h3>
+        <div class="dua-content" style="display:none;">
+          <p class="arabic"><%= d.arabic %></p>
+          <p class="transliteration"><%= d.transliteration %></p>
+          <p class="translation"><%= d.translation %></p>
+          <!-- <p class="tags">Tags: <%= d.tags.join(', ') %></p> -->
+        </div>
+      </article>
+    <% }); %>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.dua-title').forEach(function(title) {
+    title.addEventListener('click', function() {
+      const content = title.nextElementSibling;
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    });
+  });
+</script>
+

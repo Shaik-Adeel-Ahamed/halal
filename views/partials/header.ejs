@@ -1,0 +1,80 @@
+
+<header class="site-header">
+  <h1 class="logo"><a href="/"><b>Islamic Guide</b></a></h1>
+
+  <form class="search-form" action="/search" method="GET">
+    <input 
+      type="text" 
+      name="q" 
+      placeholder="Search Duas, Surahs, Hadiths, Sunnahs..." 
+      required>
+    <button type="submit"><i class="fa fa-search"></i></button>
+  </form>
+</header>
+
+<style>
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; /* allow items to wrap on small screens */
+  gap: 0.5rem;
+  padding: 10px 20px;
+  background: #5eb1bf; 
+  color: #fff;
+  ;border-bottom:1px solid transparent
+}
+
+.site-header .logo a {
+  text-decoration: none;
+  color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1; /* allow input to take available space */
+  min-width: 200px;
+}
+
+.search-form input {
+  padding: 0.4rem 0.7rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 250px;
+  flex: 1; /* input grows to fill space */
+}
+
+.search-form button {
+  background: #74ebd5;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-form button:hover {
+  background: #5eb1bf;
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+  .search-form input {
+    width: 100%;
+  }
+}
+</style>
+

@@ -1,0 +1,71 @@
+<section>
+  <h2>Islamic Quiz — Level <%= level %></h2>
+
+  <% if (!hadiths.length) { %>
+    <p>No questions found for this level.</p>
+  <% } else { %>
+    <form id="quizForm">
+      <% hadiths.forEach((h, index) => { %>
+        <article class="card">
+          <h3>Q<%= index + 1 %>. <%= h.question %></h3>
+          <ul class="options">
+            <% h.options.forEach(opt => { %>
+              <li>
+                <label>
+                  <input type="radio" name="q<%= index %>" value="<%= opt %>" required>
+                  <%= opt %>
+                </label>
+              </li>
+            <% }) %>
+          </ul>
+        </article>
+      <% }) %>
+      <button type="submit" class="btn">Submit Answers</button>
+    </form>
+    <div id="result" class="hidden"></div>
+  <% } %>
+</section>
+
+<script>
+  const form = document.getElementById('quizForm');
+  const resultDiv = document.getElementById('result');
+
+  // ✅ Safe fallback in case hadiths isn't passed
+  const total = <%= hadiths && hadiths.length ? hadiths.length : 0 %>;
+
+  // ✅ Safely encode correct answers as a JS array (using JSON.stringify string)
+  const correctAnswers = JSON.parse('<%= JSON.stringify(hadiths ? hadiths.map(h => h.answer) : []) %>');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if (total === 0) {
+      alert("No questions found for this quiz.");
+      return;
+    }
+
+    let score = 0;
+
+    for (let i = 0; i < total; i++) {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (selected && selected.value === correctAnswers[i]) {
+        score++;
+      }
+    }
+
+    resultDiv.classList.remove('hidden');
+    resultDiv.innerHTML = `<h3>Your Score: ${score} / ${total}</h3>`;
+  });
+</script>
+
+
+<style>
+  section { max-width: 800px; margin: auto; padding: 20px; }
+  .card { background: #fff; padding: 15px; border-radius: 10px; margin: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  h3 { margin-bottom: 10px; }
+  .options { list-style: none; padding-left: 0; }
+  .options li { margin-bottom: 8px; }
+  .btn { background: #007bff; color: #fff; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; }
+  .btn:hover { background: #0056b3; }
+  #result { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; text-align: center; }
+</style>
